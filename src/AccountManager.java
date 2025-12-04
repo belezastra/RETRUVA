@@ -1,35 +1,37 @@
-import java.util.HashMap;
-import java.util.Map;
+package RETRUVA;
+
+import java.util.ArrayList;
 
 public class AccountManager {
 
-    private Map<String, Account> accounts = new HashMap<>();
+    private ArrayList<RETRUVA.Account> accounts = new ArrayList<>();
 
     public AccountManager() {
-        // Default admin is still added
-        accounts.put("admin", new Admin("admin", "admin123"));
+        accounts.add(new Admin("admin", "admin123")); // default admin
     }
 
     public void registerUser(String username, String password) {
-        if (accounts.containsKey(username)) {
-            System.out.println("Username already exists!");
-            return;
-        }
-        accounts.put(username, new User(username, password));
+        accounts.add(new User(username, password));
     }
 
     public Admin loginAdmin(String username, String password) {
-        Account acc = accounts.get(username);
-        if (acc instanceof Admin && acc.getPassword().equals(password)) {
-            return (Admin) acc;
+        for (RETRUVA.Account acc : accounts) {
+            if (acc instanceof Admin &&
+                    acc.getUsername().equals(username) &&
+                    acc.getPassword().equals(password)) {
+                return (Admin) acc;
+            }
         }
         return null;
     }
 
     public User loginUser(String username, String password) {
-        Account acc = accounts.get(username);
-        if (acc instanceof User && acc.getPassword().equals(password)) {
-            return (User) acc;
+        for (RETRUVA.Account acc : accounts) {
+            if (acc instanceof User &&
+                    acc.getUsername().equals(username) &&
+                    acc.getPassword().equals(password)) {
+                return (User) acc;
+            }
         }
         return null;
     }

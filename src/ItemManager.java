@@ -1,59 +1,72 @@
-import java.util.HashMap;
-import java.util.Map;
+package RETRUVA;
+
 import java.util.ArrayList;
 
 public class ItemManager {
 
-    private Map<Integer, Item> items = new HashMap<>();
+    private ArrayList<RETRUVA.Item> items = new ArrayList<>();
 
-    public void addItem(Item item) {
-        items.put(item.getId(), item);
+    public ItemManager() {
+        // default items
+        items.add(new RETRUVA.Item(1, "Wallet", "Black leather wallet", "Library", "2025-01-20"));
+        items.add(new RETRUVA.Item(2, "Umbrella", "Blue umbrella with white stripes", "Cafeteria", "2025-02-05"));
+        items.add(new RETRUVA.Item(3, "USB Flash Drive", "16GB Kingston USB", "Computer Lab", "2025-02-10"));
+        items.add(new RETRUVA.Item(4, "Water Bottle", "Red metal bottle", "Gym", "2025-02-12"));
+    }
+
+    // ---------------- Add Item ----------------
+    public void addItem(RETRUVA.Item item) {
+        items.add(item);
         System.out.println("Item added successfully!");
     }
 
+    // ---------------- Remove Item ----------------
     public boolean removeItem(int id) {
-        if (items.remove(id) != null) {
-            System.out.println("Item removed successfully!");
-            return true;
+        for (RETRUVA.Item item : items) {
+            if (item.getId() == id) {
+                items.remove(item);
+                return true; // removed successfully
+            }
         }
-        System.out.println("Item not found!");
-        return false;
+        return false; // item not found
     }
 
-    public ArrayList<Item> searchItem(String keyword) {
-        ArrayList<Item> results = new ArrayList<>();
-        for (Item item : items.values()) {
-            if (item.getName().toLowerCase().contains(keyword.toLowerCase()) ||
-                    item.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+    // ---------------- Search Item ----------------
+    public ArrayList<RETRUVA.Item> searchItem(String keyword) {
+        ArrayList<RETRUVA.Item> results = new ArrayList<>();
+        String lowerKeyword = keyword.toLowerCase();
+
+        for (RETRUVA.Item item : items) {
+            if (item.getName().toLowerCase().contains(lowerKeyword) ||
+                    item.getDescription().toLowerCase().contains(lowerKeyword)) {
                 results.add(item);
             }
         }
         return results;
     }
 
+    // ---------------- Claim Item ----------------
     public boolean claimItem(int id) {
-        Item item = items.get(id);
-
-        if (item != null) {
-            if (!item.isClaimed()) {
-                item.claim();
-                System.out.println("Item successfully claimed!");
-                return true;
-            } else {
-                System.out.println("Item is already claimed!");
-                return false;
+        for (RETRUVA.Item item : items) {
+            if (item.getId() == id) {
+                if (!item.isClaimed()) {
+                    item.claim();
+                    return true; // successfully claimed
+                } else {
+                    return false; // already claimed
+                }
             }
         }
-        System.out.println("Item not found!");
-        return false;
+        return false; // item not found
     }
 
+    // ---------------- List All Items ----------------
     public void listItems() {
         if (items.isEmpty()) {
             System.out.println("No items available.");
             return;
         }
-        for (Item item : items.values()) {
+        for (RETRUVA.Item item : items) {
             System.out.println("----------------------------");
             System.out.println("ID: " + item.getId());
             System.out.println("Name: " + item.getName());
@@ -63,5 +76,10 @@ public class ItemManager {
             System.out.println("Claimed: " + (item.isClaimed() ? "Yes" : "No"));
             System.out.println("----------------------------");
         }
+    }
+
+    // ---------------- Get Items for GUI ----------------
+    public ArrayList<RETRUVA.Item> getItems() {
+        return items;
     }
 }
